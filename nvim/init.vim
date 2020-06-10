@@ -34,14 +34,12 @@ function! PackagerInit() abort
   call packager#add('w0rp/ale')
   call packager#add('wellle/targets.vim')
   call packager#add('rstacruz/vim-closer')
-  call packager#add('ncm2/ncm2')
-  call packager#add('ncm2/ncm2-bufword')
-  call packager#add('ncm2/ncm2-tagprefix')
-  call packager#add('ncm2/ncm2-path')
-  call packager#add('roxma/nvim-yarp')
   call packager#add('christoomey/vim-tmux-navigator')
   call packager#add('justinmk/vim-dirvish')
   call packager#add('chuling/equinusocio-material.vim')
+  call packager#add('neovim/nvim-lsp')
+  call packager#add('haorenW1025/diagnostic-nvim')
+  call packager#add('haorenW1025/completion-nvim')
 endfunction
 
 command! PackagerInstall call PackagerInit() | call packager#install()
@@ -85,6 +83,22 @@ endif
 let g:equinusocio_material_darker = 1
 colorscheme equinusocio_material
 hi Normal guibg=#000000
+
+" neovim/nvim-lsp
+lua require 'lsp'
+
+" diagnostic-nvim
+let g:diagnostic_enable_virtual_text = 1
+let g:diagnostic_show_sign = 1
+let g:diagnostic_auto_popup_while_jump = 1
+let g:diagnostic_insert_delay = 1
+
+" completion-nvim
+autocmd BufEnter * lua require'completion'.on_attach()
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+let g:completion_enable_auto_popup = 1
+let g:completion_auto_change_source = 1
 
 " Automatic resizing of splits to equal sizes
 autocmd VimResized * wincmd =
@@ -187,13 +201,6 @@ command! Tags !ctags -R -I EXTERN -I INIT --exclude='build*' --exclude='.vim-src
       \ --exclude=.svn --exclude=.hg --exclude="*.cache.html" --exclude="*.nocache.js" --exclude="*.min.*" --exclude="*.map"
       \ --exclude="*.swp" --exclude="*.bak" --exclude="*.pyc" --exclude="*.class" --exclude="*.sln" --exclude="*.Master" --exclude="*.csproj"
       \ --exclude="*.csproj.user" --exclude="*.cache" --exclude="*.dll" --exclude="*.pdb" --exclude=tags --exclude="cscope.*" --exclude="*.tar.*"
-
-" Enable ncm2 for all buffers
-autocmd BufEnter * call ncm2#enable_for_buffer()
-
-" Use <TAB> to select the popup menu:
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " ALE config
 nmap <leader>e <Plug>(ale_fix)
